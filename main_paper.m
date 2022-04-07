@@ -5,7 +5,7 @@ addpath('egrssMatlab')
 input_folder = 'sharp_sample_images';
 output_folder = 'deblurred_sample_images';
 
-% ========== Load and blur sharp image ==========
+% =============== Load and blur sharp image ==============
 
 images = {'barbara.tif' 'boat.tif' 'cameraman.tif' 'peppers.tif'}; 
 im = 1;         % index for choosing between the four above
@@ -35,7 +35,7 @@ drawnow;
 
 % Options
 save_deblur = 0;    % Save output deblurred image?
-save_x_test = 1;    % Save output deblurred image as .mat file (used in testing)
+save_x_test = 0;    % Save output deblurred image as .mat file (used in testing)
 use_egrss = 1;      % Use egrss package for r_update? If 0 only works on small-scale.
 use_gpu = 0;        % Use gpu for faster computations? Requires Parallel computing toolbox
 use_chol = 1;       % Take uncertainty into account in x_update
@@ -54,7 +54,7 @@ patch_height = 150; % Height of patch for radius estimation
 % Other Parameters
 lambda_TV = 5e-5;            % Regularization parameter for TV
 mu_r0 = r_true - r_true/5;   % Initial radius, set to 10% smaller/larger than true one
-delta_r0 = 0.3;              % Initial variance 
+delta_r0 = r_true/5;              % Initial variance 
 
 % plots N(mu_r0, delta_r0^2) to see if r_true is within +-3*delta_r0
 x_grid = linspace(0,2*r_true);
@@ -127,8 +127,9 @@ subplot(1,2,2); imshow(x_estimate); title("Deblurred image");
 % Save to file
 if save_deblur == 1
     % saves image to output folder
-    output_file = [output_folder '/' currentfilename(1:end-4) '.png'];
-    imwrite(x_estimate,output_file)
+    output_file = [output_folder '/' images{im}(1:end-4) '_r_' num2str(r_true)...
+        '_nl_' num2str(eta) '_lambdaTV_' num2str(lambda_TV) '.png'];
+    imwrite(x_estimate, output_file)
 end
 if save_x_test == 1
     % save parameters used for test in a struct
@@ -144,7 +145,9 @@ if save_x_test == 1
     test_params.dr_final = delta_r;
     test_params.deblurred_im = x_estimate;
     % create a folder in the test folder system for this value of lambda_TV
-    % (you can create the folder system by running the folder_generator.m file)
+    % (you can create the folder system by running the folder_generator.m 
+    % file, just remember to change the folder paths to your own below and
+    % in the folder_generator.m file)
     test_folder = ['C:\Users\Rainow Slayer\OneDrive\Documents\Skole\DTU\' ...
         '9. semester\HDC 2021 - Image deblurring project course\HDC paper\'...
         'tests\r_true__' num2str(r_true) '\noise_level__' num2str(eta) '\'];
