@@ -9,6 +9,8 @@ input_folder = 'sharp_sample_images';
 images = {'barbara.tif' 'boat.tif' 'cameraman.tif' 'peppers.tif'}; 
 im = 1;         % index for choosing between the four above
 x_true = im2double(imread([input_folder '\' images{im}]));
+%x_true = imresize(x_true, 0.5);                  % uncomment if we do not use egrss package
+
 
 % blur the image
 r_true = 3;                                       % radius of PSF
