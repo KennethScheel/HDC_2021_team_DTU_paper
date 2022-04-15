@@ -11,7 +11,7 @@ x_true = im2double(imread([input_folder '\' images{im}]));
 
 RADII = 1:4;
 ETA = [1,5,10,20];
-LAMBDA = [1e-2, 5e-3, 1e-3, 5e-4, 1e-4, 5e-5, 1e-5];
+LAMBDA = [10, 5, 1, 0.5, 0.1, 0.05, 1e-2, 5e-3, 1e-3];
 for h = 1:length(RADII)
     for j = 1:length(ETA)
         for i = 1:length(LAMBDA)
@@ -63,7 +63,7 @@ for h = 1:length(RADII)
             progress = zeros(n_iter+1,4);
             x_iterates = zeros(length(b), width(b), n_iter+1);
 
-            % We plots N(mu_r0, delta_r0^2) to see if r_true is within +-3*delta_r0
+            % We plot N(mu_r0, delta_r0^2) to see if r_true is within +-3*delta_r0
             x_grid = linspace(0,2*r_true);
             figure(4); hold on; 
             plot(x_grid, normpdf(x_grid, mu_r0, delta_r0), 'linewidth', 2);
@@ -132,7 +132,7 @@ for h = 1:length(RADII)
             end
 
             % ==== Deblur with radius estimate ====
-            x_estimate = x_update(x, mu_r, delta_r, b, sigma_e, 0, lambda_TV, use_chol);
+            x_estimate = x_update(x, mu_r, delta_r, b, sigma_e, Sx, lambda_TV, use_chol);
             if use_gpu == 1
                 x_estimate = gather(x_estimate);
             end
