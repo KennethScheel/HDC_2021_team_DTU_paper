@@ -9,7 +9,7 @@ input_folder = 'sharp_sample_images';
 images = {'barbara.tif' 'boat.tif' 'cameraman.tif' 'peppers.tif'}; 
 im = 1;         % index for choosing between the four above
 x_true = im2double(imread([input_folder '\' images{im}]));
-%x_true = imresize(x_true, 0.5);                  % uncomment if we do not use egrss package
+x_true = imresize(x_true, 0.5);                  % uncomment if we do not use egrss package
 
 
 % blur the image
@@ -38,7 +38,7 @@ drawnow;
 % Options
 save_deblur = 0;    % Save output deblurred image?
 save_x_test = 1;    % Save output deblurred image as .mat file (used in testing)
-use_egrss = 1;      % Use egrss package for r_update? If 0 only works on small-scale.
+use_egrss = 0;      % Use egrss package for r_update? If 0 only works on small-scale.
 use_gpu = 0;        % Use gpu for faster computations? Requires Parallel computing toolbox
 use_chol = 1;       % Take uncertainty into account in x_update
 estimate_r = 1;     % binary flag for using the iterative radius estimation 
