@@ -14,7 +14,7 @@ Sx = 100;
 
 R = 1:4;
 ETA = [1,5,10,20];
-lambdas = logspace(-3,1.3,30); % [0.001,20]
+lambdas = logspace(-3,2,30);
 
 for j = 3%:length(R)
     for k = 2%:length(ETA)
@@ -41,7 +41,6 @@ for j = 3%:length(R)
         % drawnow;
         
         % Other Parameters
-        mu_r0 = r_true - r_true/5;   % Initial radius, set to 10% smaller/larger than true one
         delta_r0 = r_true/5;         % Initial variance 
 
         % Estimate noise standard deviation
@@ -72,7 +71,16 @@ for j = 3%:length(R)
         test_folder = ['C:\Users\Rainb\OneDrive\Documents\Skole\DTU\' ...
                 '9. semester\HDC 2021 - Image deblurring project course\HDC paper\'...
                 'reg_parameter_choice\r_true__' num2str(r_true) '\noise_level__' num2str(eta) '\'];
-        save([test_folder images{im}(1:end-4) '_rel_error_vs_lambdaTV.mat'], 'rel_err_opt')
+        out.r_true = r_true;
+        out.lambdas = lambdas;
+        out.kernel = kernel;
+        out.true_noise_lvl = eta;
+        out.alpha_var = alpha;
+        out.delta_r= delta_r;
+        out.relative_errors = rel_err_opt;
+        [~,i_opt] = min(rel_err_opt);
+        out.lambda_opt = lambdas(i_opt);
+        save([test_folder images{im}(1:end-4) '_rel_error_vs_lambdaTV.mat'], '-struct', 'out')
     end
 end
 
