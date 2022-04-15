@@ -19,8 +19,8 @@ x_trueBC = padarray(x_true,[p p], 'symmetric');   % incorporate BC
 b_blurred = conv2(x_trueBC, PSF, 'valid');        % perform convolution
 
 % Add percentage relative Gaussian noise with noise level delta
-eta = 1;                            % noise level in percentage
-d = randn(size(b_blurred));         % generate i.i.d. noise from N(0,1)
+eta = 5;                             % noise level in percentage
+d = randn(size(b_blurred));          % generate i.i.d. noise from N(0,1)
 d1 = d/norm(d)*norm(b_blurred);      % scale it to match the norm of data
 b = b_blurred + (eta/100)*d1;        % scale with percentage noise and add to data
 
@@ -52,7 +52,7 @@ patch_width  = 150; % Width of patch for radius estimation
 patch_height = 150; % Height of patch for radius estimation
 
 % Other Parameters
-lambda_TV = 5e-2;            % Regularization parameter for TV
+lambda_TV = 5;            % Regularization parameter for TV
 mu_r0 = r_true - r_true/5;   % Initial radius, set to 10% smaller/larger than true one
 delta_r0 = r_true/5;         % Initial variance 
 
@@ -82,7 +82,7 @@ progress(1,:) = [mu_r,delta_r,abs(mu_r-r_true),norm(x0-x_true)/norm(x_true),0];
 x_iterates(:,:,1) = x0;
 
 % ============ Deblur with true kernel ===========
-x_deblur_true = x_update(x0, r_true, delta_r, b, sigma_e, 0, lambda_TV, use_chol);
+x_deblur_true = x_update(x0, r_true, delta_r, b, sigma_e, Sx, lambda_TV, use_chol);
 rel_err_opt = norm(x_deblur_true-x_true)/norm(x_true);
 % optimal result we can expect
 true_kernel_deblur_fig = figure(3); 
@@ -137,7 +137,7 @@ else
 end
 
 % ==== Deblur with radius estimate ====
-x_estimate = x_update(x, mu_r, delta_r, b, sigma_e, 0, lambda_TV, use_chol);
+x_estimate = x_update(x, mu_r, delta_r, b, sigma_e, Sx, lambda_TV, use_chol);
 rel_err_final = norm(x_estimate-x_true)/norm(x_true);
 
 if use_gpu == 1
