@@ -115,7 +115,7 @@ if estimate_r
         % save initial reconstruction explicitly
         if k == 1 
             initial_deblur = x; 
-            initial_deblur_fig = figure(5); imshow(x); title('Initial deblurred image'); drawnow;
+            initial_deblur_fig = figure(5); imshow(initial_deblur); title('Initial deblurred image'); drawnow;
         else  
             figure(6); imshow(x); title('Current deblurred image'); drawnow;
         end
